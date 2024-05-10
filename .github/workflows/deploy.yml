@@ -17,3 +17,12 @@ jobs:
           wget -c $(wget -q https://api.github.com/repos/AppImageCommunity/pkg2appimage/releases -O - | grep "pkg2appimage-.*-x86_64.AppImage" | grep browser_download_url | head -n 1 | cut -d '"' -f 4)
           chmod +x ./pkg2appimage-*.AppImage
           ./pkg2appimage-*.AppImage ./recipe.yml
+          mv out/Inkscape-*.AppImage Inkscape.AppImage
+      - uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: Inkscape.AppImage
+          asset_name: Inkscape.AppImage
+          tag: ${{env.BRANCH}}-continuous
+          overwrite: true
+          body: ${{ github.event.head_commit.message }}
